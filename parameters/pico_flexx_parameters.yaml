@@ -1,0 +1,27 @@
+!!python/object/new:dynamic_reconfigure.encoding.Config
+dictitems:
+  auto_exposure: true
+  exposure_time: 260
+  fps: '2'
+  gray_divisor: 100
+  groups: !!python/object/new:dynamic_reconfigure.encoding.Config
+    dictitems:
+      auto_exposure: true
+      exposure_time: 260
+      fps: '2'
+      gray_divisor: 100
+      groups: !!python/object/new:dynamic_reconfigure.encoding.Config
+        state: []
+      id: 0
+      name: Default
+      parameters: !!python/object/new:dynamic_reconfigure.encoding.Config
+        state: []
+      parent: 0
+      state: true
+      type: ''
+      use_case_id: 0
+      use_case_name: MODE_9_5FPS_2000
+    state: []
+  use_case_id: 0
+  use_case_name: MODE_9_5FPS_2000
+state: []

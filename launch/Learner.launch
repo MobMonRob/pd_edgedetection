@@ -1,0 +1,9 @@
+<launch>
+
+    <!-- Launch Pico Flexx driver -->
+    <include file="$(find edge_detection_pmd)/launch/pico_flexx_driver.launch"/>
+
+    <!-- Launch Learner-->
+    <node name="Learner" pkg="edge_detection_pmd" type="Learner.py" output="screen"/>
+
+</launch>
