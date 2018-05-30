@@ -1,4 +1,5 @@
-Installation of pmd sdk
+Installation of pmd sdk:
+
 Download full SW package (https://pmdtec.com/picofamily/software/) Password Sh!2CBpf
 
 extract
@@ -16,6 +17,7 @@ Published Topics:
 
 /object_recognition/orientation (http://docs.ros.org/kinetic/api/geometry_msgs/html/msg/Vector3.html)
 /object_recognition/position_midpoint (http://docs.ros.org/kinetic/api/geometry_msgs/html/msg/PointStamped.html)
+
 
 Test:
 
