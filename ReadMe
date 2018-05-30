@@ -3,7 +3,7 @@ Installation of pmd sdk:
 Download full SW package (https://pmdtec.com/picofamily/software/) Password Sh!2CBpf
 
 extract
-libroyale-3.16.0.51-LINUX-arm-64Bit
+  libroyale-3.16.0.51-LINUX-arm-64Bit
 
 create new folder 'Royale' in home directory
 paste extracted folder to new folder 'Royale'
