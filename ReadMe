@@ -9,8 +9,8 @@ create new folder 'Royale' in home directory
 paste extracted folder to new folder 'Royale'
 
 install udev rules provided by SDK
-    cd Royale
-    sudo cp libroyale-3.16.0.51-LINUX-arm-64Bit/driver/udev/10-royale-ubuntu.rules /etc/udev/rules.d/
+    `cd Royale
+    sudo cp libroyale-3.16.0.51-LINUX-arm-64Bit/driver/udev/10-royale-ubuntu.rules /etc/udev/rules.d/`
 
 Published Topics:
 
