@@ -1,10 +1,11 @@
 # Installation of pmd sdk:
 
-Download full SW package (https://pmdtec.com/picofamily/software/) Password Sh!2CBpf
+## Download 
+full SW package (https://pmdtec.com/picofamily/software/) Password Sh!2CBpf
 
 Further details and source found here: (https://github.com/code-iai/pico_flexx_driver)
 
-# extract
+## extract
   libroyale-3.16.0.51-LINUX-arm-64Bit
   
   Extract the archive that matches your kernel architecture from the extracted SDK to 
@@ -13,7 +14,7 @@ Further details and source found here: (https://github.com/code-iai/pico_flexx_d
   You can find out what your kernel architecture is by running 
   ```uname -m```
 
-# install udev rules provided by SDK
+## install udev rules provided by SDK
 ```cd royale
 sudo cp libroyale-3.16.0.51-LINUX-arm-64Bit/driver/udev/10-royale-ubuntu.rules /etc/udev/rules.d/
 ```
