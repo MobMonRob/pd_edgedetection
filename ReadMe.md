@@ -1,4 +1,4 @@
-# Installation of pmd sdk:
+# Installation of pmd sdk
 
 ## download 
 full SW package (https://pmdtec.com/picofamily/software/) Password Sh!2CBpf
