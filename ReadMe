@@ -6,9 +6,11 @@ Further details and source found here: (https://github.com/code-iai/pico_flexx_d
 
 extract
   libroyale-3.16.0.51-LINUX-arm-64Bit
-
-create new folder 'Royale' in home directory
-paste extracted folder to new folder 'Royale'
+  
+  Extract the archive that matches your kernel architecture from the extracted SDK to 
+  <catkin_ws>/src/pico_flexx_driver/royale. 
+  
+  You can find out what your kernel architecture is by running uname -m.
 
 install udev rules provided by SDK
     ```cd Royale```
