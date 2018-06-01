@@ -29,6 +29,11 @@ sudo cp libroyale-3.16.0.51-LINUX-arm-64Bit/driver/udev/10-royale-ubuntu.rules /
 
 ```cd ~/workspace```
 
+##build 
+```catkin build```
+
+eventually delete the devel and the build folder in the workspace before
+
 Terminal 1:
 
 ```roslaunch edge_detection_pmd Learner.launch```
