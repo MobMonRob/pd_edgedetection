@@ -1,6 +1,6 @@
 # Installation of pmd sdk:
 
-## Download 
+## download 
 full SW package (https://pmdtec.com/picofamily/software/) Password Sh!2CBpf
 
 Further details and source found here: (https://github.com/code-iai/pico_flexx_driver)
