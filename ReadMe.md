@@ -24,13 +24,21 @@ sudo cp libroyale-3.16.0.51-LINUX-arm-64Bit/driver/udev/10-royale-ubuntu.rules /
 /object_recognition/orientation (http://docs.ros.org/kinetic/api/geometry_msgs/html/msg/Vector3.html)
 /object_recognition/position_midpoint (http://docs.ros.org/kinetic/api/geometry_msgs/html/msg/PointStamped.html)
 
+# Installation pd_edgedetection
+
+## download src
+
+```cd ~/workspace/src
+git clone https://github.com/MobMonRob/pd_edgedetection edge_detection_pmd```
+
+## build 
+```catkin build```
 
 # Test
 
 ```cd ~/workspace```
 
-## build 
-```catkin build```
+
 
 eventually delete the devel and the build folder in the workspace before
 
