@@ -24,7 +24,7 @@ sudo cp libroyale-3.16.0.51-LINUX-arm-64Bit/driver/udev/10-royale-ubuntu.rules /
 /object_recognition/orientation (http://docs.ros.org/kinetic/api/geometry_msgs/html/msg/Vector3.html)
 /object_recognition/position_midpoint (http://docs.ros.org/kinetic/api/geometry_msgs/html/msg/PointStamped.html)
 
-# Installation pd_edgedetection
+# Installation of pd_edgedetection
 
 ## download src
 
