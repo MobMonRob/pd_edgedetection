@@ -22,7 +22,7 @@ class Learner(Detector):
         self.object_gripper_expanse = None
         self.object_center = None
 	self.object_rotation = None
-	self.pub_position_midpoint = rospy.Publisher("/object_recognition/position_midpoint", PointStamped, queue_size=10)
+	self.pub_position_midpoint = rospy.Publisher("/object_recognition/position_midpoint", Vector3, queue_size=10)
 	self.pub_orientation = rospy.Publisher("/object_recognition/orientation",Vector3, queue_size = 10)
 	
 
@@ -65,29 +65,49 @@ class Learner(Detector):
             # print("Difference:", difference)
 
             self.draw_contour(contour_index)
-            midpoint, finger_point1, finger_point2, rotation, vx, vy, center = self.get_object_parameters(contour_index)
+            #midpoint, finger_point1, finger_point2, rotation, vx, vy, center = self.get_object_parameters(contour_index)
+            # center sollte den 3d point enthalten, wenn die Bestimmung schief geht steht da aber midpoint.x, midpoint.y, 0 drin
+            midpoint, rotation, vx, vy, center = self.get_object_parameters(contour_index)
 	    self.object_center = midpoint
 	    self.object_rotation = rotation
 	    self.vx = vx
 	    self.vy = vy
- 	    self.center3d = center 
+
+ 	    #self.center3d = center 
+            # workaround, da center3d nicht zuverlaessig bestimmt wird
+            self.center3d = Point(midpoint[0], midpoint[1], 0)
+	#else: 
+            #best_match = min(matching_contours.items(), key=lambda x: x[1])
+  	    #contour_index = best_match[0]
+            #self.draw_contour(contour_index)
+            #midpoint, finger_point1, finger_point2, rotation, vx, vy, center = self.get_object_parameters(contour_index)
+        #    self.object_center = [999999,999999,999999]
+	#    self.object_rotation = [999999,999999,999999]
+	#    self.vx = 999999
+	#    self.vy = 999999
+ 	#    self.center3d = 999999
 
         # Get desired action (save/cancel)
         self.show_image_wait("Learner")
 	# save object
 	#self.state = self.save_object
+	rospy.loginfo("Center:")
 	rospy.loginfo(self.object_center)
+        rospy.loginfo("Rotation:")
 	rospy.loginfo(self.object_rotation)
+        rospy.loginfo("v:")
 	rospy.loginfo(self.vx)
 	rospy.loginfo(self.vy)
+        rospy.loginfo("Center 3d:")
         rospy.loginfo(self.center3d)
 	# publish object
 	self.publish_object()
 
+	# das war alles auskommentiert
         #if self.pressed_key == ord("y"):
-         #   self.state = self.save_object
+        #    self.state = self.save_object
         #if self.pressed_key == ord("n"):
-         #   self.state = self.init
+        #    self.state = self.init
 
     def save_object(self):
 	name = "object"
@@ -109,7 +129,7 @@ class Learner(Detector):
         self.state = self.init
 
     def publish_object(self):
-	self.pub_position_midpoint.publish(PointStamped(self.point_cloud.header, self.center3d))
+	self.pub_position_midpoint.publish(self.center3d)
 	self.pub_orientation.publish(Vector3(self.vx, self.vy, 0))
 
 

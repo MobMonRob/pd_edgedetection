@@ -1,9 +1,9 @@
 {
   "debugging": true,
   "objects": "../objects/objects.json",
-  "camera_max": 0.40,
-  "camera_min": 0.25,
-  "camera_thresh": 0.35,
+  "camera_max": 0.55,
+  "camera_min": 0.35,
+  "camera_thresh": 0.5,
   "maximal_contour_difference": 0.4,
-  "minimal_contour_length": 20
+  "minimal_contour_length": 45
 }

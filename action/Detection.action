@@ -1,9 +1,10 @@
 #goal definition
-
+int32 numberOfFrames
 ---
 #result definition
-float64[] midpoint_position
-float64[] orientation
+geometry_msgs/Vector3 midpoint_position
+geometry_msgs/Vector3 orientation
+float64 rz
 
 ---
 #feedback

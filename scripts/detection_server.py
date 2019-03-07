@@ -2,6 +2,8 @@
 
 import rospy
 
+import numpy as np
+
 import actionlib
 
 import edge_detection_pmd.msg
@@ -64,6 +66,7 @@ class DetectionAction(object):
 	    rospy.loginfo("got it")
             self._result.orientation = averaged_orientation
 	    self._result.midpoint_position = averaged_midpoint
+	    self._result.rz = np.arccos(self._sum_orientation.y/1)
             rospy.loginfo('%s: Succeeded' % self._action_name)
             self._as.set_succeeded(self._result)
         

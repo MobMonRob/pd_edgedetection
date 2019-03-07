@@ -10,10 +10,11 @@ project(edge_detection_pmd)
 find_package(catkin REQUIRED COMPONENTS
   roscpp
   rospy
+  actionlib
   std_msgs
-  actionlib_msgs
-  sensor_msgs
   geometry_msgs
+  actionlib_msgs
+  sensor_msgs  
   message_generation
 )
 
@@ -74,7 +75,9 @@ find_package(catkin REQUIRED COMPONENTS
 ## Generate added messages and services with any dependencies listed here
  generate_messages(
    DEPENDENCIES
-   std_msgs actionlib_msgs geometry_msgs
+   std_msgs 
+   geometry_msgs
+   actionlib_msgs    
  )
 
 ################################################
@@ -111,7 +114,7 @@ catkin_package(
 #  LIBRARIES edge_detection_pmd
 #  CATKIN_DEPENDS roscpp rospy std_msgs
 #  DEPENDS system_lib
-  CATKIN_DEPENDS actionlib_msgs
+  CATKIN_DEPENDS actionlib_msgs geometry_msgs
 )
 
 ###########

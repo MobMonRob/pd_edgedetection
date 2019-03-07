@@ -21,6 +21,7 @@ class Detector:
     def __init__(self):
         rospy.Subscriber("/royale_camera_driver/depth_image", Image, self.callback)
 	rospy.Subscriber("/royale_camera_driver/point_cloud", PointCloud2, self.save_point_cloud)
+
         self.cv_bridge = CvBridge()
 
         # print("OpenCV version: {0}".format(cv2.__version__))  # 2.4.8
@@ -80,9 +81,11 @@ class Detector:
 
         return cx, cy
 
+    # return midpoint in 2d, rotation ?, vx u. vy (Achse), center in 3d
     def get_object_parameters(self, contour_index):
         center, end_point1, end_point2, rotation = self.get_points_on_vertical(contour_index)
-
+	rospy.loginfo("get_obj_param:")
+	rospy.loginfo(center)
         finger_point1 = self.get_finger_position(center, end_point1, contour_index)
         finger_point2 = self.get_finger_position(center, end_point2, contour_index)
 
@@ -90,11 +93,25 @@ class Detector:
         midpoint_y = int(np.average([finger_point1[1], finger_point2[1]]))
         midpoint = (midpoint_x, midpoint_y)
 
+        #
+        #rospy.loginfo("midpoint: x=" + str(midpoint_x) + " y=" + str(midpoint_y))
+        #
+	
         cv2.circle(self.image_rgb, midpoint, 1, self.colors["red"])
 	vx, vy = self.get_object_axis(contour_index)
-	[center, fp1, fp2] = self.get_3d_points([midpoint, finger_point1, finger_point2])
-
-        return midpoint, finger_point1, finger_point2, rotation, vx, vy, center
+	
+	#[center, fp1, fp2] = self.get_3d_points([midpoint, finger_point1, finger_point2])
+        # 3d beschaffen aus der pointcloud
+        points = self.get_3d_points([midpoint])
+        if (len(points) > 0):
+          center = self.get_3d_points([midpoint])[0]
+        else:
+          center = (midpoint_x, midpoint_y, 0)
+	rospy.loginfo("get_obj_param_3d:")
+        rospy.loginfo("2d:")
+	rospy.loginfo(center)
+        #return midpoint, finger_point1, finger_point2, rotation, vx, vy, center
+        return midpoint, rotation, vx, vy, center
 
     def get_finger_position(self, center, direction_point, contour_index):
         intersection = self.intersect_line_with_contour(center, direction_point, contour_index)
@@ -169,21 +186,25 @@ class Detector:
 
         self.debug_image(prepared_image, "Prepared Image")
 
-        # Find Contours
-        image, contours, hierarchy = cv2.findContours(prepared_image, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
+        # Find Contours Aufruf malt gestrichelte graue Umrandung?
+        image, contours, hierarchy = cv2.findContours(prepared_image, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE) #  CHAIN_APPROX_NONE hat nicht gebracht
 
         # Filter useful contours
         self.contours = []
         image_y, image_x = self.image_bw.shape
         corners = [(2, 2), (2, image_y - 3), (image_x - 3, 2), (image_x - 3, image_y - 3)]
         for contour in contours:
-            # Only select contours with more than 40 points
+            # test
+            rospy.loginfo("contour length = "+str(len(contour)))
+
+            # Only select contours with more than minimal_contour_length points
             if len(contour) > self.settings["minimal_contour_length"]:
                 in_corner = False
                 # Test if Contour is in one of the corners
+                # wird gebraucht, damit die Umrandung des Sichtfelds als Contour ausgeschlossen werden kann
                 for point in corners:
                     if cv2.pointPolygonTest(contour, point, False) == 1:
-                        in_corner = True
+                       in_corner = True
                 if not in_corner:
                     self.contours.append(contour)
 
@@ -194,7 +215,7 @@ class Detector:
         image_show = np.copy(self.image_rgb)
         #image_show = np.copy(prepared_image)
         # drawContours(image, contours, contourIdx, color, thickness)
-        cv2.drawContours(image_show, self.contours, -1, (0, 255, 255), 1)
+        cv2.drawContours(image_show, self.contours, -1, (0, 255, 255), 1) # gelb, -1 alle, 
         for corner in corners:
             cv2.circle(image_show, corner, 1, color=self.colors["blue"], thickness=1)
         self.debug_image(image_show, "Useful Contours")
@@ -225,11 +246,30 @@ class Detector:
     def draw_contour(self, contour_index, color_index=2):
         cv2.drawContours(self.image_rgb, self.contours, contour_index, self.colors.values()[color_index], 1)
 
+    # es wurden hier urspuenglich 3 Punkte uebergeben, der erste der Mittelpunkt und dann noch die beiden fingerpoints
+    # jetzt wird hier nur noch der Mittelpunkt uebergeben
     def get_3d_points(self, points_2d):
         points_3d = []
-        for point_3d in list(pc2.read_points(self.point_cloud, uvs=points_2d)):
-            x, y, z = point_3d
-            points_3d.append(Point(x, y, z))
+	rospy.loginfo("3d_punkte:")
+        i=0
+	#while len(points_3d) < 1:
+        while len(points_3d) < 1 | i < 10:
+          rospy.loginfo("input 2d: x="+str(points_2d[0][0])+" y="+str(points_2d[0][1]))
+          # mit skip nan kehrt read_points ohne einen point_3d zurueck wenn einer der Koordinaten nan ist
+          for point_3d in list(pc2.read_points(self.point_cloud, uvs=points_2d, skip_nans=True)):
+          #for point_3d in list(pc2.read_points(self.point_cloud, uvs=points_2d)):
+             x, y, z = point_3d
+	     #rospy.loginfo("2d: x="+str(points_2d[0][0])+" y="+str(points_2d[0][0]))
+	     rospy.loginfo("3d: x="+str(x)+" y="+str(y)+" z="+str(z));
+	     if 0.27 < z < 0.36:
+              points_3d.append(Point(x, y, z))
+              #rospy.loginfo("append")
+             else:
+              rospy.loginfo("out of range")
+          # workaround
+          #if len(points_3d) < 1:
+          #   pc2.read_points(self.point_cloud, uvs=Point(0,0,0), skip_nans=True)
+          i=i + 1
 	return points_3d
 
     @staticmethod
